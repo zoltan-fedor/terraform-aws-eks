@@ -13,10 +13,10 @@ resource "aws_iam_openid_connect_provider" "oidc_provider" {
   thumbprint_list = [var.eks_oidc_root_ca_thumbprint]
   url             = flatten(concat(aws_eks_cluster.this[*].identity[*].oidc.0.issuer, [""]))[0]
 
-  tags = merge(
+  tags = var.tag_iam_policy_and_profile ? merge(
     {
       Name = "${var.cluster_name}-eks-irsa"
     },
     var.tags
-  )
+  ) : null
 }
